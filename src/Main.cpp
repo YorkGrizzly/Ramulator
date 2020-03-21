@@ -170,7 +170,8 @@ void run_cputrace(const Config &configs, Memory<T, Controller> &memory, const st
 }
 
 template <typename T>
-void start_run(const Config &configs, T *spec, const vector<const char *> &files) //config: config of type of memory, spec : type of memory
+void start_run(const Config &configs, T *spec, const vector<const char *> &files)
+//config: config of type of memory, spec : type of memory
 {
   // initiate controller and memory
   int C = configs.get_channels(), R = configs.get_ranks();
@@ -189,7 +190,7 @@ void start_run(const Config &configs, T *spec, const vector<const char *> &files
   }
   Memory<T, Controller> memory(configs, ctrls);
 
-  // see trace type
+  // see trace type, whether it's CPU or DRAM trace driven mode
   assert(files.size() != 0);
   if (configs["trace_type"] == "CPU")
   {
@@ -200,6 +201,10 @@ void start_run(const Config &configs, T *spec, const vector<const char *> &files
     run_dramtrace(configs, memory, files[0]);
   }
 }
+
+
+
+
 
 int main(int argc, const char *argv[])
 {
@@ -212,10 +217,11 @@ int main(int argc, const char *argv[])
     return 0;
   }
 
-  Config configs(argv[1]); //set to config of whatever type of memory is used
+  Config configs(argv[1]); //set to configuration file of type of memory used
 
   const std::string &standard = configs["standard"];
   assert(standard != "" || "DRAM standard should be specified.");
+  //assert : if argument is zero, causes an assertion failure that terminates the program
 
   const char *trace_type = strstr(argv[2], "=");
   trace_type++;

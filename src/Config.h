@@ -27,7 +27,8 @@ private:
 public:
     Config() {}
     Config(const std::string& fname);
-    void parse(const std::string& fname);
+    void parse(const std::string& fname); // defined in Config.cpp
+    // overload [] to use ' ["variable"] = value ' syntax
     std::string operator [] (const std::string& name) const {
       if (options.find(name) != options.end()) {
         return (options.find(name))->second;
@@ -36,6 +37,7 @@ public:
       }
     }
 
+    // check if a certain variable key is present
     bool contains(const std::string& name) const {
       if (options.find(name) != options.end()) {
         return true;
@@ -44,6 +46,7 @@ public:
       }
     }
 
+    // if option in config not yet set, set that variable option to specified value
     void add (const std::string& name, const std::string& value) {
       if (!contains(name)) {
         options.insert(make_pair(name, value));
@@ -52,8 +55,10 @@ public:
       }
     }
 
+    // write private member
     void set_core_num(int _core_num) {core_num = _core_num;}
 
+    //return private members
     int get_channels() const {return channels;}
     int get_subarrays() const {return subarrays;}
     int get_ranks() const {return ranks;}
@@ -102,6 +107,8 @@ public:
       }
       return false;
     }
+
+    // discern whether need to print on terminal
     bool print_cmd_trace() const {
       // the default value is false
       if (options.find("print_cmd_trace") != options.end()) {
