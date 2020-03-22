@@ -54,7 +54,7 @@ public:
         SRX,
         MAX
     };
-    /*
+    /* Prerequisite Commands
     ACT : activate
     PRE : precharge
     PREA : precharge all
@@ -67,7 +67,7 @@ public:
     PDX : exit power-down
     SRE : self-refresh entry
     SRX : self-refresh exit
-    MAX : 
+    MAX : sentinel value that indicates that the recursion should continue down the tree, until the command is eventually decoded by a different lambda at a lower level
 
 
     */

@@ -52,7 +52,7 @@ void run_dramtrace(const Config &configs, Memory<T, Controller> &memory, const c
 
   Request req(addr, type, read_complete);
 
-  while (!end || memory.pending_requests())
+  while (!end || memory.pending_requests()) // dram.trace must have an extra blank line at EOF else can't read the command
   {
     if (!end && !stall)
     {
@@ -61,8 +61,9 @@ void run_dramtrace(const Config &configs, Memory<T, Controller> &memory, const c
 
     if (!end)
     {
-      req.addr = addr;
-      req.type = type;
+      req.addr = addr; // hexadecimal address in .trace file
+      req.type = type; // command operation in .trace file
+
       stall = !memory.send(req);
       if (!stall)
       {
@@ -82,6 +83,7 @@ void run_dramtrace(const Config &configs, Memory<T, Controller> &memory, const c
     clks++;
     Stats::curTick++; // memory clock, global, for Statistics
   }
+
   // This a workaround for statistics set only initially lost in the end
   memory.finish();
   Stats::statlist.printall();
@@ -201,10 +203,6 @@ void start_run(const Config &configs, T *spec, const vector<const char *> &files
     run_dramtrace(configs, memory, files[0]);
   }
 }
-
-
-
-
 
 int main(int argc, const char *argv[])
 {
