@@ -15,7 +15,7 @@ class DDR4
 {
 public:
     static string standard_name;
-    enum class Org;
+    enum class Org; // organization types of DDR4
     enum class Speed;
     DDR4(Org org, Speed speed);
     DDR4(const string& org_str, const string& speed_str);
@@ -155,7 +155,7 @@ public:
     void set_rank_number(int rank);
 
     /* Speed */
-    enum class Speed : int
+    enum class Speed : int    // name of DDR4 types, with different memory clocks, data rates, timings...
     {
         DDR4_1600K, DDR4_1600L,
         DDR4_1866M, DDR4_1866N,
@@ -177,6 +177,7 @@ public:
     int channel_width = 64;
 
     struct SpeedEntry {
+        //https://en.wikipedia.org/wiki/DDR4_SDRAM
         int rate;
         double freq, tCK;
         int nBL, nCCDS, nCCDL, nRTRS;
@@ -187,7 +188,21 @@ public:
         int nRFC, nREFI;
         int nPD, nXP, nXPDLL; // XPDLL not found in DDR4??
         int nCKESR, nXS, nXSDLL; // nXSDLL TBD (nDLLK), nXS = (tRFC+10ns)/tCK
-    } speed_table[int(Speed::MAX)] = {
+        /*
+tCK: clock period
+nBL : burst length
+nCCDS : CAS to CAS command delay for same bank group
+nCCDL : CAS to CAS command delay for different bank group
+nRTRS : row to row switching time
+nCL : column access strobe latency
+nRCD : row to column interval delay
+nRP : row precharge delay
+nCWL : CAS write latency
+nRAS : row access strobe (minimum time RAS must be maintained)
+nRC : row cycle time (minimum time between successive row accesses)
+nRTP : READ command to PRECHARGE command delay for auto precharge
+        */
+    } speed_table[int(Speed::MAX)] = { // timing specs corresponding to different types of DDR4 
         {1600, (400.0/3)*6, (3/0.4)/6, 4, 4, 5, 2, 11, 11, 11,  9, 28, 39, 6, 2, 6, 12, 0, 0, 0, 0, 0, 4, 5, 0, 5, 0, 0},
         {1600, (400.0/3)*6, (3/0.4)/6, 4, 4, 5, 2, 12, 12, 12,  9, 28, 40, 6, 2, 6, 12, 0, 0, 0, 0, 0, 4, 5, 0, 5, 0, 0},
         {1866, (400.0/3)*7, (3/0.4)/7, 4, 4, 5, 2, 13, 13, 13, 10, 32, 45, 7, 3, 7, 14, 0, 0, 0, 0, 0, 5, 6, 0, 6, 0, 0},
