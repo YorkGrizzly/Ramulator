@@ -9,7 +9,7 @@ using namespace ramulator;
 
 namespace ramulator
 {
-
+// make sure the given channels and rank fit the type of DRAM
 template <>
 void MemoryFactory<LPDDR4>::validate(int channels, int ranks, const Config& configs) {
     assert(channels >= 2 && "LPDDR4 requires 2, 4, 8 ... channels");

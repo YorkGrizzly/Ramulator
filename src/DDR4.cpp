@@ -30,7 +30,7 @@ map<string, enum DDR4::Speed> DDR4::speed_map = {
 DDR4::DDR4(Org org, Speed speed)
     : org_entry(org_table[int(org)]),
     speed_entry(speed_table[int(speed)]), 
-    read_latency(speed_entry.nCL + speed_entry.nBL)
+    read_latency(speed_entry.nCL + speed_entry.nBL) //CAS latency + burst length
 {
     init_speed();
     init_prereq();
@@ -55,6 +55,14 @@ void DDR4::set_rank_number(int rank) {
 
 void DDR4::init_speed()
 {
+    /*
+RRDS : activate to activate command delay to different bank group (JEDEC DDR4 p.235)
+RRDL : activate to activate command delay to same bank group
+FAW : four activate window (JEDEC DDR4 p.236)
+RFC : refresh cycle time (JEDEC DDR4 p.143)
+REFI : refresh interval (maximum time between refresh operations) (JEDEC DDR4 p.49) https://en.wikipedia.org/wiki/Memory_refresh
+XS : exit self refresh to commands not requiring a DLL (delay-locked loop) (JEDEC DDR4 p.238)
+    */
     const static int RRDS_TABLE[2][5] = {
         {4, 4, 4, 4, 4},
         {5, 5, 6, 7, 9}

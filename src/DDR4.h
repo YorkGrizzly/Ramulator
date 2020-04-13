@@ -16,7 +16,7 @@ class DDR4
 public:
     static string standard_name;
     enum class Org; // organization types of DDR4
-    enum class Speed;
+    enum class Speed; //timing speeds of each type (memory access, ...)
     DDR4(Org org, Speed speed);
     DDR4(const string& org_str, const string& speed_str);
     
@@ -126,7 +126,7 @@ public:
         int dist;
         int val;
         bool sibling;
-    }; 
+    };
     vector<TimingEntry> timing[int(Level::MAX)][int(Command::MAX)];
 
     /* Lambda */
@@ -202,7 +202,7 @@ nRAS : row access strobe (minimum time RAS must be maintained)
 nRC : row cycle time (minimum time between successive row accesses)
 nRTP : READ command to PRECHARGE command delay for auto precharge
         */
-    } speed_table[int(Speed::MAX)] = { // timing specs corresponding to different types of DDR4 
+    } speed_table[int(Speed::MAX)] = { // timing specs corresponding to different types of DDR4 (in clk periods)
         {1600, (400.0/3)*6, (3/0.4)/6, 4, 4, 5, 2, 11, 11, 11,  9, 28, 39, 6, 2, 6, 12, 0, 0, 0, 0, 0, 4, 5, 0, 5, 0, 0},
         {1600, (400.0/3)*6, (3/0.4)/6, 4, 4, 5, 2, 12, 12, 12,  9, 28, 40, 6, 2, 6, 12, 0, 0, 0, 0, 0, 4, 5, 0, 5, 0, 0},
         {1866, (400.0/3)*7, (3/0.4)/7, 4, 4, 5, 2, 13, 13, 13, 10, 32, 45, 7, 3, 7, 14, 0, 0, 0, 0, 0, 5, 6, 0, 6, 0, 0},
