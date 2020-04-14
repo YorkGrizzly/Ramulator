@@ -265,6 +265,7 @@ typename T::Command DRAM<T>::decode(typename T::Command cmd, const int* addr)
 // Check
 template <typename T>
 bool DRAM<T>::check(typename T::Command cmd, const int* addr, long clk)
+// check whether a command is ready to be scheduled
 {
     if (next[int(cmd)] != -1 && clk < next[int(cmd)])
         return false; // stop recursion: the check failed at this level
@@ -281,6 +282,7 @@ bool DRAM<T>::check(typename T::Command cmd, const int* addr, long clk)
 // Check row hits
 template <typename T>
 bool DRAM<T>::check_row_hit(typename T::Command cmd, const int* addr)
+// Check whether a command is a row hit
 {
     int child_id = addr[int(level)+1];
     if (rowhit[int(cmd)]) {
@@ -296,6 +298,7 @@ bool DRAM<T>::check_row_hit(typename T::Command cmd, const int* addr)
 
 template <typename T>
 bool DRAM<T>::check_row_open(typename T::Command cmd, const int* addr)
+// Check whether a row is open
 {
     int child_id = addr[int(level)+1];
     if (rowopen[int(cmd)]) {
@@ -311,6 +314,7 @@ bool DRAM<T>::check_row_open(typename T::Command cmd, const int* addr)
 
 template <typename T>
 long DRAM<T>::get_next(typename T::Command cmd, const int* addr)
+// Return the earliest clock when a command is ready to be scheduled
 {
     long next_clk = max(cur_clk, next[int(cmd)]);
     auto node = this;
@@ -324,6 +328,7 @@ long DRAM<T>::get_next(typename T::Command cmd, const int* addr)
 // Update
 template <typename T>
 void DRAM<T>::update(typename T::Command cmd, const int* addr, long clk)
+// Update the timing/state of the tree, signifying that a command has been issued
 {
     cur_clk = clk;
     update_state(cmd, addr);
@@ -407,6 +412,7 @@ void DRAM<T>::update_timing(typename T::Command cmd, const int* addr, long clk)
 
 template <typename T>
 void DRAM<T>::update_serving_requests(const int* addr, int delta, long clk) {
+// Update the number of requests it serves currently
   assert(id == addr[int(level)]);
   assert(delta == 1 || delta == -1);
   // update total serving requests
